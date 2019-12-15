@@ -35,14 +35,14 @@ $ usermod -G wheel kiyota
 - 鍵認証の設定
 
 ```bash
-# 秘密鍵をローカルに保存
-$ less /home/kiyota/.ssh/id_rsa
+### serverでの作業
+# 鍵の生成(鍵にパスワードは不要なので、enterを押して生成)
+$ ssh-keygen
 
 # 自身の公開鍵を、authorized_keysに登録
 # これで秘密鍵を保存したローカルから秘密鍵を指定すれば鍵認証でログインできる
-$ cat /home/kiyota/.ssh/id_rsa.pub
-$ vi /home/kiyota/.ssh/authorized_keys
-$ chmod 700 /home/kiyota/.ssh/authorized_keys
+$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+$ chmod 400 /home/kiyota/.ssh/authorized_keys
 
 # パスワード認証できないように設定
 $ sudo vi /etc/ssh/sshd_config
@@ -50,6 +50,20 @@ $ sudo vi /etc/ssh/sshd_config
      64 #PasswordAuthentication yes
      65 PasswordAuthentication no
      66 #PermitEmptyPasswords no
+
+# 秘密鍵を出力(ローカルに保存するためコピーする)
+$ cat ~/.ssh/id_rsa
+```
+
+```bash
+### ローカル(Mac)での作業
+$ mkdir ~/vps
+
+# コピーした秘密鍵をペースト
+$ vi ~/vps/vultr.pem
+
+# vpsに接続できることを確認
+$ ssh ユーザ名@xxxx.xxxx.xxxx.xxxx
 ```
 
 - SSHポートの変更
